@@ -1,53 +1,92 @@
-import React, { useState } from "react";
 
-function AddTransactionForm({ submission }) {
-	const [formData, setFormData] = useState({
-		date: "",
-		description: "",
-		category: "",
-		amount: 0,
-	});
+import React, { useState } from 'react'
 
-	function handleSubmit(e) {
-		e.preventDefault();
-		submission(formData);
-	}
 
-	function handleChange(e) {
-		setFormData({ ...formData, [e.target.name]: e.target.value });
-	}
+function AddTransactionForm() {
+  const [description, setDescription] = useState('')
+  const [amount, setAmount] = useState('')
+  const [date, setDate] = useState('')
+  const [category, setCategory] = useState('')
 
-	return (
-		<div className="ui segment">
-			<form onChange={handleChange} onSubmit={handleSubmit} className="ui form">
-				<div className="inline fields">
-					<input defaultValue={formData.date} type="date" name="date" />
-					<input
-						defaultValue={formData.description}
-						type="text"
-						name="description"
-						placeholder="Description"
-					/>
-					<input
-						defaultValue={formData.category}
-						type="text"
-						name="category"
-						placeholder="Category"
-					/>
-					<input
-						defaultValue={formData.amount}
-						type="number"
-						name="amount"
-						placeholder="Amount"
-						step="0.01"
-					/>
-				</div>
-				<button className="ui button" type="submit">
-					Add Transaction
-				</button>
-			</form>
-		</div>
-	);
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value)
+  }
+
+  const handleAmountChange = (event) => {
+    setAmount(event.target.value)
+  }
+
+  const handleDateChange = (event) => {
+    setDate(event.target.value)
+  }
+
+  const handleCategoryChange = (event) => {
+    setCategory(event.target.value)
+  }
+
+  const handleChange = (e) => {
+    e.preventDefault()
+    const newTransaction = {
+      date: date,
+      description: description,
+      category: category,
+      amount: amount,
+    }
+    fetch('http://localhost:8001/transactions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(newTransaction),
+    })
+      .then((resp) => resp.json())
+      .then((newQuestion) => console.log(newQuestion))
+    // onFormSubmit(newTransaction)
+  }
+
+  return (
+    <div className='ui segment' onSubmit={handleChange}>
+      <form className='ui form'>
+        <div className='inline fields'>
+          <input
+            type='date'
+            name='date'
+            value={date}
+            onChange={handleDateChange}
+            required
+          />
+          <input
+            type='text'
+            name='description'
+            placeholder='Description'
+            value={description}
+            onChange={handleDescriptionChange}
+            required
+          />
+          <input
+            type='text'
+            name='category'
+            placeholder='Category'
+            value={category}
+            onChange={handleCategoryChange}
+            required
+          />
+          <input
+            type='number'
+            name='amount'
+            placeholder='Amount'
+            step='0.01'
+            onChange={handleAmountChange}
+            required
+          />
+        </div>
+        <button className='ui button' type='submit'>
+          Add Transaction
+        </button>
+      </form>
+    </div>
+  )
 }
 
-export default AddTransactionForm;
+export default AddTransactionForm
+

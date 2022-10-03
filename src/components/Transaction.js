@@ -1,15 +1,14 @@
+import React from 'react'
 
-import React from "react";
-
-function Transaction({ date, description, category, amount }) {
-	return (
-		<tr>
-			<td>{date}</td>
-			<td>{description}</td>
-			<td>{category}</td>
-			<td>{amount}</td>
-		</tr>
-	);
+function Transaction({ transaction }) {
+  return (
+    <tr>
+      <td>{transaction.date}</td>
+      <td>{transaction.description}</td>
+      <td>{transaction.category}</td>
+      <td>{transaction.amount}</td>
+    </tr>
+  )
 }
 
-export default Transaction;
+export default Transaction
